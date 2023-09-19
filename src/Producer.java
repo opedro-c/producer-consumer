@@ -1,33 +1,27 @@
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
-public class Producer implements Runnable {
+public class Producer extends BaseThread implements Runnable {
 
-    private List<Integer> list;
-    private Integer counter = 0;
+    private int counter = 0;
 
-    public Producer(List<Integer> list) {
-        this.list = list;
+    public Producer(List<Integer> list, Semaphore semaphore) {
+        super(list, semaphore);
     }
 
     public void produce() {
-        
         for (int i = 0; i < 50; i++) {
+        	down();
 			addNumberToList();
 			printValueProduced();
-//			sleep(200);
+			up();
+			sleep(200);
 		}
+    	System.out.println("Producer: Done");
     }
 
 	private void printValueProduced() {
 		System.out.printf("Produced: %d%n", counter);
-	}
-
-	private void sleep(Integer milliseconds) {
-		try {
-			Thread.sleep(milliseconds);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void addNumberToList() {

@@ -1,35 +1,30 @@
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
-public class Consumer implements Runnable {
+public class Consumer extends BaseThread implements Runnable {
 
-    private List<Integer> list;
-    private Integer lastRemoved;
+    private int lastRemoved;
 
-    public Consumer(List<Integer> list) {
-        this.list = list;
+    public Consumer(List<Integer> list, Semaphore semaphore) {
+        super(list, semaphore);
     }
 
     public void consume() {
     	for (int i = 0; i < 50; i++) {			
+    		down();
     		if (!list.isEmpty()) {
     			removeNumberFromList();
-    			printValueConsumed();
+    			printValueRemoved();
     		} else {
     			System.out.println("Nothing to consume");
     		}
-//    		sleep(200);
+    		up();
+    		sleep(200);
 		}
+    	System.out.println("Consumer: Done");
     }
 
-	private void sleep(Integer milliseconds) {
-		try {
-			Thread.sleep(milliseconds);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void printValueConsumed() {
+	private void printValueRemoved() {
 		System.out.printf("Consumed: %d%n", lastRemoved);
 	}
 
