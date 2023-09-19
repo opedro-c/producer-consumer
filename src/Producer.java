@@ -1,15 +1,43 @@
-import java.util.Stack;
+import java.util.List;
 
-public class Producer {
+public class Producer implements Runnable {
 
-    Stack<Integer> stack;
+    private List<Integer> list;
+    private Integer counter = 0;
 
-    public Producer(Stack<Integer> stack) {
-        this.stack = stack;
+    public Producer(List<Integer> list) {
+        this.list = list;
     }
 
     public void produce() {
-        // TODO
+        
+        for (int i = 0; i < 50; i++) {
+			addNumberToList();
+			printValueProduced();
+//			sleep(200);
+		}
     }
 
+	private void printValueProduced() {
+		System.out.printf("Produced: %d%n", counter);
+	}
+
+	private void sleep(Integer milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void addNumberToList() {
+		list.add(counter++);
+	}
+
+	@Override
+	public void run() {
+		produce();
+	}
+
+	
 }

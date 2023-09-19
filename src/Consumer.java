@@ -1,22 +1,41 @@
-import java.util.Stack;
-import java.util.concurrent.Semaphore;
+import java.util.List;
 
 public class Consumer implements Runnable {
 
-    Stack<Integer> stack;
+    private List<Integer> list;
+    private Integer lastRemoved;
 
-    public Consumer(Stack<Integer> stack) {
-        this.stack = stack;
+    public Consumer(List<Integer> list) {
+        this.list = list;
     }
 
     public void consume() {
-        if (!stack.empty()) {
-            Integer valueConsumed = stack.pop();
-            System.out.printf("Consumed: %d%n", valueConsumed);
-        } else {
-            System.out.println("Nothing to consume");
-        }
+    	for (int i = 0; i < 50; i++) {			
+    		if (!list.isEmpty()) {
+    			removeNumberFromList();
+    			printValueConsumed();
+    		} else {
+    			System.out.println("Nothing to consume");
+    		}
+//    		sleep(200);
+		}
     }
+
+	private void sleep(Integer milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void printValueConsumed() {
+		System.out.printf("Consumed: %d%n", lastRemoved);
+	}
+
+	private void removeNumberFromList() {
+		lastRemoved = list.remove(0);
+	}
 
     @Override
     public void run() {
