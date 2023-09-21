@@ -3,22 +3,22 @@ import java.util.concurrent.Semaphore;
 
 public class Producer extends BaseThread implements Runnable {
 
-    private int counter = 0;
+	private int counter = 0;
 
-    public Producer(List<Integer> list, Semaphore semaphore) {
-        super(list, semaphore);
-    }
+	public Producer(List<Integer> list, Semaphore semaphore) {
+		super(list, semaphore);
+	}
 
-    public void produce() {
-        for (int i = 0; i < 50; i++) {
-        	down();
+	public void produce() {
+		for (int i = 0; i < 50; i++) {
+			down();
 			addNumberToList();
 			printValueProduced();
 			up();
 			sleep(200);
 		}
-    	System.out.println("Producer: Done");
-    }
+		System.out.println("Producer: Done");
+	}
 
 	private void printValueProduced() {
 		System.out.printf("Produced: %d%n", counter);
@@ -33,5 +33,4 @@ public class Producer extends BaseThread implements Runnable {
 		produce();
 	}
 
-	
 }
